@@ -19,9 +19,9 @@ public class Spawner : MonoBehaviour {
 		}
 	}
 
-	public void UpdateNodes(float[] activations) {
-		for(int i = 0; i < activations.Length; i++) {
-			nodes[i].activation = activations[i];
+	public void UpdateNodes(Matrix activations) {
+		for(int i = 0; i < activations.Rows; i++) {
+			nodes[i].activation = activations[i, 0];
 		}
 	}
 

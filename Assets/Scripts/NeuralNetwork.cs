@@ -30,18 +30,31 @@ public class NeuralNetwork {
 		return outputs;
 	}
 
-	public void Train(Matrix trainingInputs, Matrix trainingOutputs, int epochs) {
+	public void Train(Matrix trainingInputs, char[] trainingOutputs, int epochs, int batchSize, float learningRate) {
 		Matrix output, error, deltas, temp;
-		for(int i = 0; i < epochs; i++) {
-			output = Predict(trainingInputs);
-			error = Matrix.Subtract(trainingOutputs, output);
+		for(int epoch = 0; epoch < epochs; epoch++) {
+			for(int batch = 0; batch < (60000 / batchSize); batch++) {
+				Matrix batchInputs = new Matrix(28 * 28, batchSize);
+				Matrix batchOutputs = new Matrix(10, batchSize);
+				for(int image = 0; image < batchSize; image++) {
+					for(int pixel = 0; pixel < (28 * 28); pixel++) {
+						batchInputs[pixel, image] = trainingInputs[pixel, (batch * batchSize + image)];
+					}
+					char label = trainingOutputs[batch * batchSize + image];
+					for(int i = 0; i < 10; i++) {
+						batchOutputs[i, image] = (label == i) ? 1 : 0;
+					}
+				}
+				output = Predict(batchInputs);
+				error = Matrix.Subtract(batchOutputs, output);
 
-			for(int j = weights.Length - 1; j >= 0; j--) {
-				temp = error * SigmoidDerivative(output);
-				deltas = Matrix.Dot(temp, Matrix.Transpose(layerInputs[j]));
-				weights[j] = weights[j] + deltas;
-				error = Matrix.Dot(Matrix.Transpose(weights[j]), temp);
-				output = layerInputs[j];
+				for(int j = weights.Length - 1; j >= 0; j--) {
+					temp = error * SigmoidDerivative(output);
+					deltas = Matrix.Dot(temp, Matrix.Transpose(layerInputs[j]));
+					error = Matrix.Dot(Matrix.Transpose(weights[j]), temp);
+					weights[j] = weights[j] + deltas * learningRate;
+					output = layerInputs[j];
+				}
 			}
 		}
 	}

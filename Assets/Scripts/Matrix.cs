@@ -54,6 +54,16 @@ public class Matrix {
 		return output;
 	}
 
+	static public float Sum(Matrix A) {
+		float sum = 0;
+		for(int i = 0; i < A.Rows; i++) {
+			for(int j = 0; j < A.Cols; j++) {
+				sum += A[i, j];
+			}
+		}
+		return sum;
+	}
+
 	static public Matrix Subtract(Matrix A, Matrix B) {
 		Matrix output = new Matrix(A.Rows, A.Cols);
 		for(int i = 0; i < A.Rows; i++) {
