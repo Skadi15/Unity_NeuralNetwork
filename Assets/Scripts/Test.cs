@@ -17,7 +17,7 @@ public class Test : MonoBehaviour {
 	Matrix testData;
 	char[] testLabels;
 
-
+	//
 	// Use this for initialization
 	void Start () {
 		net = new NeuralNetwork(numNodes);
@@ -72,8 +72,11 @@ public class Test : MonoBehaviour {
 			if(choice == testLabels[i]) {
 				numCorrect++;
 			}
+
+			spawner.DrawNumber(nextImage);
 			spawner.UpdateNodes(prediction);
-			yield return null;
+
+			yield return new WaitForSeconds(1);
 		}
 		Debug.Log(numCorrect);
 	}
